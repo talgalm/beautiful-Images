@@ -1,53 +1,61 @@
-import logo from './logo.svg';
 import './App.css';
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getFirestore, collection, getDocs , addDoc} from 'firebase/firestore/lite';
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyAOex1FMaXJyD-bq3eaurCbCWaw_PRyCiQ",
-  authDomain: "beautiful-images-5ce69.firebaseapp.com",
-  databaseURL: "https://beautiful-images-5ce69-default-rtdb.firebaseio.com",
-  projectId: "beautiful-images-5ce69",
-  storageBucket: "beautiful-images-5ce69.appspot.com",
-  messagingSenderId: "266270374339",
-  appId: "1:266270374339:web:6f66d76ea2b59408536576",
-  measurementId: "G-Z3RQ3L8PVW"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
+import { addNewDocument , removeDocument , updateDocument , readDocument , queryDocuments , batchWrite } from './Firebase/FirebaseActions'; // Import db and addNewDocument
 
 function App() {
-  const addNewDocument = async () => {
-    try {
-      const docData = {
-        name: "John Doe",
-        age: 30,
-      };
+  const handleAddNewDocument = async () => {
+    const docData = {
+      name: "John Doe",
+      age: 30,
+    };
+    addNewDocument("your_collection_name", docData);
+  };
 
-      const docRef = await addDoc(collection(db, "your_collection_name"), docData);
-      console.log("Document written with ID: ", docRef.id);
-    } catch (error) {
-      console.error("Error adding document: ", error);
+  const handleRemoveDocument = async (documentId) => {
+    removeDocument("your_collection_name", documentId);
+  };
+
+  const handleUpdateDocument = async (documentId, updatedData) => {
+    updateDocument("your_collection_name", documentId, updatedData);
+  };
+
+  const handleReadDocument = async (documentId) => {
+    const documentData = await readDocument("your_collection_name", documentId);
+    if (documentData) {
+      console.log("Read Document:", documentData);
     }
+  };
+
+  const handleQueryDocuments = async () => {
+    const documents = await queryDocuments("your_collection_name", "age", ">=", 25);
+    if (documents.length > 0) {
+      console.log("Query Result:", documents);
+    } else {
+      console.log("No documents found that match the query criteria.");
+    }
+  };
+  const handleBatchWrite = async () => {
+    const operations = [
+      { type: "set", collectionName: "your_collection_name", docId: "documentId1", data: { name: "Document 1" } },
+      { type: "update", collectionName: "your_collection_name", docId: "documentId2", data: { name: "Updated Document 2" } },
+      { type: "delete", collectionName: "your_collection_name", docId: "documentId3" },
+    ];
+
+    batchWrite(operations);
   };
 
   return (
     <div className="App">
       <header className="App-header">
         <p>Welcome!</p>
-        <button onClick={addNewDocument}>Add New Document</button>
+        <button onClick={handleAddNewDocument}>Add New Document</button>
+        <button onClick={() => handleRemoveDocument("documentIdToDelete")}>Remove Document</button>
+        <button onClick={() => handleReadDocument("documentIdToRead")}>Read Document</button>
+        <button onClick={handleQueryDocuments}>Query Documents</button>
+        <button onClick={() => handleUpdateDocument("documentIdToUpdate", { name: "Updated Name" })}>Update Document</button>
+        <button onClick={handleBatchWrite}>Batch Write</button>
       </header>
     </div>
   );
 }
-
 
 export default App;
