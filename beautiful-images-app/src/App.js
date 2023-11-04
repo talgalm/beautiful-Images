@@ -1,6 +1,6 @@
 import './App.css';
 import { addNewDocument , removeDocument , updateDocument , readDocument , queryDocuments , batchWrite } from './Firebase/FirebaseActions'; // Import db and addNewDocument
-import { auth , observeAuthState  , addNewUser , signInUser , signOut } from './Firebase/FirebaseAuth'; 
+import { auth , observeAuthState  , addNewUser , signInUser , signOut , sendEmailVerificationLink , deleteUserAccount   } from './Firebase/FirebaseAuth'; 
 import { useEffect, useState } from 'react';
 
 
@@ -85,6 +85,14 @@ function App() {
     }
   };
 
+  const handleSendVerificationEmail = () => {
+    sendEmailVerificationLink(auth.currentUser);
+  };
+
+  const handleDeleteAccount = () => {
+    deleteUserAccount();
+  };
+
   return (
     <div className="App">
       <header className="App-header">
@@ -102,8 +110,17 @@ function App() {
         ) : (
           <p>Please sign in to continue.</p>
         )}
+        {auth.currentUser && !auth.currentUser.emailVerified && (
+          <>
+            <p>Please verify your email address.</p>
+            <button onClick={handleSendVerificationEmail}>Send Verification Email</button>
+          </>
+        )}
+        
         <button onClick={handleAddNewUser}>Add New User</button>
         <button onClick={handleSignIn}>Sign In</button>
+        <button onClick={handleDeleteAccount}>Delete Account</button>
+
       </header>
     </div>
   );

@@ -1,6 +1,7 @@
 
 import { initializeApp } from "firebase/app";
-import { getAuth , onAuthStateChanged , createUserWithEmailAndPassword , signInWithEmailAndPassword , signOut} from "firebase/auth";
+import { getAuth , onAuthStateChanged , createUserWithEmailAndPassword ,
+     signInWithEmailAndPassword , signOut , sendEmailVerification , deleteUser } from "firebase/auth";
 
 import firebaseConfig from './FirebaseConfig';
 
@@ -37,7 +38,26 @@ const addNewUser = async (email, password) => {
       console.error("Error signing in: ", error.message);
     }
   };
+
+  const sendEmailVerificationLink = (user) => {
+    sendEmailVerification(auth.currentUser)
+      .then(() => {
+        console.log("Email verification link sent successfully.");
+      })
+      .catch((error) => {
+        console.error("Error sending email verification link: ", error.message);
+      });
+  };
+
+  const deleteUserAccount = async () => {
+    try {
+      await deleteUser(auth.currentUser);
+      console.log("User account deleted successfully.");
+    } catch (error) {
+      console.error("Error deleting user account: ", error.message);
+    }
+  };
   
-  export { auth, observeAuthState , addNewUser , signInUser , signOut};
+  export { auth, observeAuthState , addNewUser , signInUser , signOut , sendEmailVerificationLink , deleteUserAccount };
 
 export default auth
