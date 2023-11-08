@@ -1,6 +1,7 @@
 import './App.css';
 import { addNewDocument , removeDocument , updateDocument , readDocument , queryDocuments , batchWrite } from './Firebase/FirebaseActions'; // Import db and addNewDocument
-import { auth , observeAuthState  , addNewUser , signInUser , signOut , sendEmailVerificationLink , deleteUserAccount   } from './Firebase/FirebaseAuth'; 
+import { auth , observeAuthState  , addNewUser , signInUser , signOut , sendEmailVerificationLink , deleteUserAccount ,
+  signInWithGoogle  } from './Firebase/FirebaseAuth'; 
 import { useEffect, useState } from 'react';
 
 
@@ -93,6 +94,14 @@ function App() {
     deleteUserAccount();
   };
 
+  const handleSignInGoogle = async () => {
+    try {
+      await signInWithGoogle();
+    } catch (error) {
+      console.error("Error signing in: ", error);
+    }
+  };
+
   return (
     <div className="App">
       <header className="App-header">
@@ -121,6 +130,8 @@ function App() {
         <button onClick={handleSignIn}>Sign In</button>
         <button onClick={handleDeleteAccount}>Delete Account</button>
 
+        <p>Google !</p>
+        <button onClick={handleSignInGoogle}>Press to sign</button>
       </header>
     </div>
   );
