@@ -3,9 +3,16 @@ import { addNewDocument , removeDocument , updateDocument , readDocument , query
 import { auth , observeAuthState  , addNewUser , signInUser , signOut , sendEmailVerificationLink , deleteUserAccount ,
   signInWithGoogle  } from './Firebase/FirebaseAuth'; 
 import { useEffect, useState } from 'react';
+import { translations } from './environments/languages';
+import { useLanguage } from './environments/LanguageContext';
 
 
 function App() {
+  const { currentLanguage, changeLanguage } = useLanguage();
+
+  const handleLanguageChange = (newLanguage) => {
+    changeLanguage(newLanguage);
+  };
 
   const handleAddNewDocument = async () => {
     const docData = {
@@ -132,8 +139,17 @@ function App() {
 
         <p>Google !</p>
         <button onClick={handleSignInGoogle}>Press to sign</button>
+        <div>
+          <p>Here is languge change</p>
+          <button onClick={() => handleLanguageChange('en')}>English</button>
+          <button onClick={() => handleLanguageChange('he')}>עברית</button>
+          {/* Add buttons for other languages as needed */}
+        </div>
+        <h1>{translations.welcome[currentLanguage]}</h1>
+        <p>{translations.greeting[currentLanguage]}</p>
       </header>
     </div>
+    
   );
 }
 
