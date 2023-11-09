@@ -13,7 +13,12 @@
   }
 }
 
-.App-header {
+/*  */
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}.App-header {
   background-color: #282c34;
   min-height: 100vh;
   display: flex;
@@ -23,11 +28,148 @@
   font-size: calc(10px + 2vmin);
   color: white;
 }
+App.css
+
+.App {
+  text-align: center;
+}
+
+/* Top Layer Header */
+.TopLayerHeader {
+  background-color: rgb(234, 145, 21);
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.TopLayerHeader a {
+  color: black;
+  text-decoration: none;
+  padding: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.TopLayerHeader a:hover {
+  background-color: #404040;
+}
+
+/* Additional styles for the rest of the page */
+.ContentBelowHeader {
+  background-color: #282c34;
+  padding: 20px;
+  min-height: 100vh;
+}
+
+/* Navigation Links */
+nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+
+nav li {
+  margin-right: 20px;
+}
+
+nav a {
+  text-decoration: none;
+  color: white;
+  font-weight: bold;
+  font-size: 1.2em;
+  transition: color 0.3s ease;
+}
+
+nav a:hover {
+  color: white;
+}
+
+
 
 .App-link {
   color: #61dafb;
 }
 
+:root {
+  --background-gradient: linear-gradient(178deg, #ffff33 10%, #3333ff);
+  --gray: #34495e;
+  --darkgray: #2c3e50;
+}
+
+select {
+  /* Reset Select */
+  appearance: none;
+  outline: 10px red;
+  border: 0;
+  box-shadow: none;
+  /* Personalize */
+  flex: 1;
+  padding: 0 1em;
+  color: #fff;
+  background-color: var(--darkgray);
+  background-image: none;
+  cursor: pointer;
+}
+/* Remove IE arrow */
+select::-ms-expand {
+  display: none;
+}
+/* Custom Select wrapper */
+.select {
+  position: relative;
+  display: flex;
+  width: 8em;
+  height: 3em;
+  border-radius: .25em;
+  overflow: hidden;
+}
+/* Arrow */
+.select::after {
+  content: '\25BC';
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 1em;
+  background-color: #34495e;
+  transition: .25s all ease;
+  pointer-events: none;
+}
+/* Transition */
+.select:hover::after {
+  color: #f39c12;
+}
+
+/* Other styles*/
+body {
+  color: #fff;
+  background: var(--background-gradient);
+}
+
+a {
+  font-weight: bold;
+  color: var(--gray);
+  text-decoration: drop-shadow;
+  padding: .25em;
+  border-radius: .50em;
+  
+}
+
+
+.container {
+  position : absolute;
+  top: 50%;
+  left : 50%;
+  transform :
+  translate(-50%,-50%); 
+}
+
+
+.down_note {
+    display: flex;
+    justify-content: center;
+
+}
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

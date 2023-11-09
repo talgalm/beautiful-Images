@@ -7,16 +7,12 @@ export const setLanguage = (language) => {
   };
 
 export const translations  = {
-    ImageRequired: {
-        he: 'ברוכים הבאים',
-        en: 'Welcome !',
+      Admin: {
+        he: 'אדמין',
+        en: 'Admin',
       },
-      welcome: {
-        he: 'ברוכים הבאים',
-        en: 'Welcome!',
-      },
-      greeting: {
-        he: 'שלום',
-        en: 'Hello',
+      Admin: {
+        he: 'אדמין',
+        en: 'Admin',
       },
 };
