@@ -7,11 +7,13 @@ import { translations } from './environments/languages';
 import { useLanguage } from './environments/LanguageContext';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFacebook, faGoogle, faLinkedin } from '@fortawesome/free-brands-svg-icons';
+
 import { Link } from 'react-router-dom';
 
 import Admin from './Components/Admin';
 import Enter from './Components/Enter';
-// Import statements...
 
 const App = () => {
   const { currentLanguage, changeLanguage } = useLanguage();
@@ -19,13 +21,22 @@ const App = () => {
   const handleLanguageChange = (newLanguage) => {
     changeLanguage(newLanguage);
   };
+  const [isSignUpActive, setSignUpActive] = useState(false);
+
+  const handleSignUpClick = () => {
+    setSignUpActive(true);
+  };
+
+  const handleSignInClick = () => {
+    setSignUpActive(false);
+  };
 
   return (
     <Router>
       <div className="App">
         <header>
           <nav className="TopLayerHeader">
-          <div class = "select">
+            <div class="select">
               <select
                 value={currentLanguage}
                 onChange={(e) => handleLanguageChange(e.target.value)}
@@ -33,7 +44,7 @@ const App = () => {
                 <option value="en">English</option>
                 <option value="he">עברית</option>
               </select>
-            </div> 
+            </div>
             <ul>
               <li>
                 <Link to="/admin">{translations.Admin[currentLanguage]}</Link>
@@ -46,6 +57,68 @@ const App = () => {
         </header>
 
         <div className="ContentBelowHeader">
+          <div className={`container ${isSignUpActive ? 'right-panel-active' : ''}`} id="container">
+            <div className="form-container sign-up-container">
+              <form action="#">
+                <h1>{translations.CreateAccount[currentLanguage]}</h1>
+                <div className="social-container">
+                  <a href="#" className="social">
+                    <FontAwesomeIcon icon={faFacebook} />
+                  </a>
+                  <a href="#" className="social">
+                    <FontAwesomeIcon icon={faGoogle} />
+                  </a>
+                  <a href="#" className="social">
+                    <FontAwesomeIcon icon={faLinkedin} />
+                  </a>
+                </div>
+                <span>{translations.EmailRegistration[currentLanguage]}</span>
+                <input type="text" placeholder="Name" />
+                <input type="email" placeholder="Email" />
+                <input type="password" placeholder="Password" />
+                <button>{translations.SignUp[currentLanguage]}</button>
+              </form>
+            </div>
+            <div className="form-container sign-in-container">
+              <form action="#">
+                <h1>{translations.SignIn[currentLanguage]}</h1>
+                  <div className="social-container">
+                    <a href="#" className="social">
+                      <FontAwesomeIcon icon={faFacebook} />
+                    </a>
+                    <a href="#" className="social">
+                      <FontAwesomeIcon icon={faGoogle} />
+                    </a>
+                    <a href="#" className="social">
+                      <FontAwesomeIcon icon={faLinkedin} />
+                    </a>
+                  </div>
+                <span>{translations.UseYourAccount[currentLanguage]}</span>
+                <input type="email" placeholder="Email" />
+                <input type="password" placeholder="Password" />
+                <a href="#">{translations.ForgetPassword[currentLanguage]}</a>
+                <button>{translations.SignIn[currentLanguage]}</button>
+              </form>
+            </div>
+            <div className="overlay-container">
+              <div className="overlay">
+                <div className="overlay-panel overlay-left">
+                  <h1>{translations.WelcomeBack[currentLanguage]}</h1>
+                  <p>{translations.LoginPersonalInfo[currentLanguage]}</p>
+                  <button className="ghost" id="signIn" onClick={handleSignInClick}>
+                  {translations.SignIn[currentLanguage]}
+                  </button>
+                </div>
+                <div className="overlay-panel overlay-right">
+                  <h1> {translations.HelloFriend[currentLanguage]}</h1>
+                  <p>{translations.PersonalDetails[currentLanguage]}</p>
+                  <button className="ghost" id="signUp" onClick={handleSignUpClick}>
+                  {translations.SignUp[currentLanguage]}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
           <Routes>
             <Route path="admin/" element={<Admin />} />
             <Route path="/enter" element={<Enter />} />
@@ -57,7 +130,6 @@ const App = () => {
 };
 
 export default App;
-
 
 // function App() {
 
@@ -205,16 +277,5 @@ export default App;
 //       </header>
 //     </div>);
 // }
-
-// export default App;
-
-// App.js
-// import React from 'react';
-// import { BrowserRouter as Router, Route, Link  , Routes} from 'react-router-dom';
-// import Home from './Components/Home';
-// import About from './Components/About';
-
-
-
 
 // export default App;
