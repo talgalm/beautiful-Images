@@ -10,6 +10,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebook, faGoogle, faLinkedin } from '@fortawesome/free-brands-svg-icons';
 
+
 import { Link } from 'react-router-dom';
 
 import Admin from './Components/Admin';
@@ -25,10 +26,85 @@ const App = () => {
 
   const handleSignUpClick = () => {
     setSignUpActive(true);
+    setEmail('');
+    setPassword('');
   };
 
   const handleSignInClick = () => {
     setSignUpActive(false);
+    setEmail('');
+    setPassword('');
+  };
+
+  const [user, setUser] = useState(null);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
+
+  useEffect(() => {
+    observeAuthState((currentUser) => {
+      setUser(currentUser);
+    });
+  }, []);
+
+  const handleEmailChange = (event) => {
+    setErrorMsg('')
+    setEmail(event.target.value);
+  };
+
+  const handlePasswordChange = (event) => {
+    setErrorMsg('')
+    setPassword(event.target.value);
+  };
+
+  const handleAddNewUser = async () => {
+    try {
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email))
+      {
+        setErrorMsg('Invalid email format');
+      }
+      else 
+      {
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        if (!passwordRegex.test(password))
+        {
+          setErrorMsg('Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one digit, and one special character.');
+        }
+        else
+        {
+          await addNewUser(email, password);
+          setEmail('');
+          setPassword('');
+          setErrorMsg('');
+        }
+      }
+    } catch (error) {
+      console.error("Error adding a new user: ", error);
+    }
+  };
+
+  const handleSignInGoogle = async () => {
+    try {
+      await signInWithGoogle();
+    } catch (error) {
+      console.error("Error signing in: ", error);
+    }
+  };
+
+  const handleSignIn = async () => {
+    try {
+      const email = 'user@example.com';
+      const password = 'password123';
+
+      await signInUser(email, password);
+    } catch (error) {
+      console.error("Error signing in: ", error);
+    }
+  };
+  const handleSignOut = async () => {
+    await signOut(auth);
   };
 
   return (
@@ -45,6 +121,8 @@ const App = () => {
                 <option value="he">עברית</option>
               </select>
             </div>
+            <p>Welcome, {user ? user.email : 'Guest'}!</p>
+
             <ul>
               <li>
                 <Link to="/admin">{translations.Admin[currentLanguage]}</Link>
@@ -52,9 +130,17 @@ const App = () => {
               <li>
                 <Link to="/enter">About</Link>
               </li>
+              <li>
+                  {user ? (
+                    <Link onClick={handleSignOut}>Sign Out</Link>
+                  ) : (
+                    <h></h>
+                  )}
+              </li>
             </ul>
           </nav>
         </header>
+
 
         <div className="ContentBelowHeader">
           <div className={`container ${isSignUpActive ? 'right-panel-active' : ''}`} id="container">
@@ -66,17 +152,17 @@ const App = () => {
                     <FontAwesomeIcon icon={faFacebook} />
                   </a>
                   <a href="#" className="social">
-                    <FontAwesomeIcon icon={faGoogle} />
+                    <FontAwesomeIcon icon={faGoogle} onClick={handleSignInGoogle} />
                   </a>
                   <a href="#" className="social">
                     <FontAwesomeIcon icon={faLinkedin} />
                   </a>
                 </div>
-                <span>{translations.EmailRegistration[currentLanguage]}</span>
-                <input type="text" placeholder="Name" />
-                <input type="email" placeholder="Email" />
-                <input type="password" placeholder="Password" />
-                <button>{translations.SignUp[currentLanguage]}</button>
+                <span style={{fontSize:'13px'}}>{translations.EmailRegistration[currentLanguage]}</span>
+                <input type="email" placeholder="Email" value={email} onChange={handleEmailChange}/>
+                <input type="password" placeholder="Password" value={password} onChange={handlePasswordChange} />
+                <button onClick={handleAddNewUser}>{translations.SignUp[currentLanguage]}</button>
+                <span  style={{ color: 'red', fontSize:'12px'}}>{errorMsg}</span>
               </form>
             </div>
             <div className="form-container sign-in-container">
@@ -87,17 +173,17 @@ const App = () => {
                       <FontAwesomeIcon icon={faFacebook} />
                     </a>
                     <a href="#" className="social">
-                      <FontAwesomeIcon icon={faGoogle} />
+                      <FontAwesomeIcon icon={faGoogle} onClick={handleSignInGoogle} />
                     </a>
                     <a href="#" className="social">
                       <FontAwesomeIcon icon={faLinkedin} />
                     </a>
                   </div>
-                <span>{translations.UseYourAccount[currentLanguage]}</span>
-                <input type="email" placeholder="Email" />
-                <input type="password" placeholder="Password" />
+                  <span style={{fontSize:'13px'}}>{translations.UseYourAccount[currentLanguage]}</span>
+                <input type="email" placeholder="Email" value={email} onChange={handleEmailChange}/>
+                <input type="password" placeholder="Password" value={password} onChange={handlePasswordChange}/>                
                 <a href="#">{translations.ForgetPassword[currentLanguage]}</a>
-                <button>{translations.SignIn[currentLanguage]}</button>
+                <button onClick={handleSignIn}>{translations.SignIn[currentLanguage]}</button>
               </form>
             </div>
             <div className="overlay-container">
@@ -119,6 +205,7 @@ const App = () => {
               </div>
             </div>
           </div>
+
           <Routes>
             <Route path="admin/" element={<Admin />} />
             <Route path="/enter" element={<Enter />} />

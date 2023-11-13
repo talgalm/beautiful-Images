@@ -16,14 +16,12 @@ const auth = getAuth(app);
 const observeAuthState = (onUserChanged) => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        // User is signed in.
         onUserChanged(user);
       } else {
-        // No user is signed in.
         onUserChanged(null);
       }
     });
-  };
+  }; 
   
 const addNewUser = async (email, password) => {
     try {
