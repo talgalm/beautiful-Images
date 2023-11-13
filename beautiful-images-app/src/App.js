@@ -3,7 +3,7 @@ import { addNewDocument , removeDocument , updateDocument , readDocument , query
 import { auth , observeAuthState  , addNewUser , signInUser , signOut , sendEmailVerificationLink , deleteUserAccount ,
   signInWithGoogle  } from './Firebase/FirebaseAuth'; 
 import { useEffect, useState } from 'react';
-import { translations } from './environments/languages';
+import { diraction, translations } from './environments/languages';
 import { useLanguage } from './environments/LanguageContext';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
@@ -18,7 +18,6 @@ import Admin from './Components/Admin';
 import Enter from './Components/Enter';
 
 const App = () => {
-
   const handleSendPasswordResetEmail = async () => {
     try {
       await sendPasswordReset(email);
@@ -28,7 +27,6 @@ const App = () => {
       setErrorMsg(error.message);
     }
   };
-
 
   const { currentLanguage, changeLanguage } = useLanguage();
 
@@ -183,8 +181,8 @@ const App = () => {
                   </a>
                 </div>
                 <span style={{fontSize:'13px'}}>{translations.EmailRegistration[currentLanguage]}</span>
-                <input type="email" placeholder="Email" value={email} onChange={handleEmailChange}/>
-                <input type="password" placeholder="Password" value={password} onChange={handlePasswordChange} />
+                <input type="email" placeholder={translations.Email[currentLanguage]} value={email} onChange={handleEmailChange} dir={diraction.dir[currentLanguage]}/>
+                <input type="password" placeholder={translations.Password[currentLanguage]} value={password} onChange={handlePasswordChange} dir={diraction.dir[currentLanguage]} />
                 <button onClick={handleAddNewUser}>{translations.SignUp[currentLanguage]}</button>
                 <span  style={{ color: 'red', fontSize:'12px'}}>{errorMsg}</span>
               </form>
@@ -204,11 +202,8 @@ const App = () => {
                     </a>
                   </div>
                   <span style={{fontSize:'13px'}}>{translations.UseYourAccount[currentLanguage]}</span>
-                <input type="email" placeholder="Email" value={email} onChange={handleEmailChange}/>
-                {/* <input type="password" placeholder="Password" value={password} onChange={handlePasswordChange}/>                
-                <a href="#">{translations.ForgetPassword[currentLanguage]}</a>
-                <button onClick={handleSignIn}>{translations.SignIn[currentLanguage]}</button> */}
-                {forgetPassword ? (<> <input type="password" placeholder="Password" value={password} onChange={handlePasswordChange}/>
+                <input type="email" placeholder={translations.Email[currentLanguage]} value={email} onChange={handleEmailChange} dir={diraction.dir[currentLanguage]}/>
+                {forgetPassword ? (<> <input type="password" placeholder={translations.Password[currentLanguage]} value={password} onChange={handlePasswordChange} dir={diraction.dir[currentLanguage]}/>
                 <a href="#" onClick={handleForgetPassword}>{translations.ForgetPassword[currentLanguage]}</a>
                 <button onClick={handleSignIn}>{translations.SignIn[currentLanguage]}</button> </> )
                 :(<button onClick={handleSendPasswordResetEmail}>{translations.SendVerification[currentLanguage]}</button>)}

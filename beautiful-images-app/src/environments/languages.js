@@ -1,12 +1,26 @@
 export const availableLanguages = ['he', 'en'];
 
 export let currentLanguage = 'en'; // Default language is English
+export let currentTextDirection = 'ltr';
 
 export const setLanguage = (language) => {
     currentLanguage = language;
-  };
-
+};
+export const diraction  = {
+  dir: {
+    he: 'rtl',
+    en: 'ltr',
+  },
+}
 export const translations  = {
+      Email: {
+        he: 'מייל',
+        en: 'Email',
+      },
+      Password: {
+        he: 'סיסמא',
+        en: 'Password',
+      },
       Admin: {
         he: 'אדמין',
         en: 'Admin',
