@@ -35,6 +35,10 @@ export const translations  = {
         he: '? שכחת את הסיסמא',
         en: 'Forgot your password ?',
       },
+      SendVerification: {
+        he: 'אפס סיסמא',
+        en: 'Send verification',
+      },
       WelcomeBack: {
         he: '! ברוכים הבאים',
         en: 'Welcome Back !',

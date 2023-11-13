@@ -2,7 +2,7 @@
 import { initializeApp } from "firebase/app";
 import { getAuth , onAuthStateChanged , createUserWithEmailAndPassword ,
      signInWithEmailAndPassword , signOut , sendEmailVerification , deleteUser,
-     getRedirectResult, GoogleAuthProvider , signInWithRedirect , signInWithPopup } from "firebase/auth";
+     getRedirectResult, GoogleAuthProvider , signInWithRedirect , signInWithPopup , sendPasswordResetEmail } from "firebase/auth";
 
 
 
@@ -22,6 +22,14 @@ const observeAuthState = (onUserChanged) => {
       }
     });
   }; 
+
+  const sendPasswordReset=  async (email) => {
+    try {
+      await sendPasswordResetEmail(auth, email);
+    } catch (error) {
+      throw error;
+    }
+  };
   
 const addNewUser = async (email, password) => {
     try {
@@ -111,6 +119,6 @@ signInWithPopup(auth, provider)
 
   
   export { auth, observeAuthState , addNewUser , signInUser , signOut , sendEmailVerificationLink , deleteUserAccount ,
-    signInWithGoogle };
+    signInWithGoogle  , sendPasswordReset};
 
 export default auth

@@ -10,6 +10,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebook, faGoogle, faLinkedin } from '@fortawesome/free-brands-svg-icons';
 
+import { sendPasswordReset } from './Firebase/FirebaseAuth';
 
 import { Link } from 'react-router-dom';
 
@@ -17,6 +18,18 @@ import Admin from './Components/Admin';
 import Enter from './Components/Enter';
 
 const App = () => {
+
+  const handleSendPasswordResetEmail = async () => {
+    try {
+      await sendPasswordReset(email);
+      console.log('Password reset email sent successfully.');
+    } catch (error) {
+      console.error('Error sending password reset email:', error.message);
+      setErrorMsg(error.message);
+    }
+  };
+
+
   const { currentLanguage, changeLanguage } = useLanguage();
 
   const handleLanguageChange = (newLanguage) => {
@@ -28,18 +41,25 @@ const App = () => {
     setSignUpActive(true);
     setEmail('');
     setPassword('');
+    setForgetPassword(false);
   };
 
   const handleSignInClick = () => {
     setSignUpActive(false);
     setEmail('');
     setPassword('');
+    setForgetPassword(true);
   };
 
   const [user, setUser] = useState(null);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
+  const [forgetPassword, setForgetPassword] = useState(true);
+
+  const handleForgetPassword = () => {
+    setForgetPassword(false);
+  };
 
   useEffect(() => {
     observeAuthState((currentUser) => {
@@ -105,6 +125,10 @@ const App = () => {
   };
   const handleSignOut = async () => {
     await signOut(auth);
+  };
+
+  const handleSendVerificationEmail = () => {
+    sendEmailVerificationLink(auth.currentUser);
   };
 
   return (
@@ -181,9 +205,13 @@ const App = () => {
                   </div>
                   <span style={{fontSize:'13px'}}>{translations.UseYourAccount[currentLanguage]}</span>
                 <input type="email" placeholder="Email" value={email} onChange={handleEmailChange}/>
-                <input type="password" placeholder="Password" value={password} onChange={handlePasswordChange}/>                
+                {/* <input type="password" placeholder="Password" value={password} onChange={handlePasswordChange}/>                
                 <a href="#">{translations.ForgetPassword[currentLanguage]}</a>
-                <button onClick={handleSignIn}>{translations.SignIn[currentLanguage]}</button>
+                <button onClick={handleSignIn}>{translations.SignIn[currentLanguage]}</button> */}
+                {forgetPassword ? (<> <input type="password" placeholder="Password" value={password} onChange={handlePasswordChange}/>
+                <a href="#" onClick={handleForgetPassword}>{translations.ForgetPassword[currentLanguage]}</a>
+                <button onClick={handleSignIn}>{translations.SignIn[currentLanguage]}</button> </> )
+                :(<button onClick={handleSendPasswordResetEmail}>{translations.SendVerification[currentLanguage]}</button>)}
               </form>
             </div>
             <div className="overlay-container">
