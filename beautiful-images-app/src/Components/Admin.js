@@ -4,7 +4,7 @@ const Admin = () => {
   return (
     <div>
       <h1>Admin Page</h1>
-      {/* Add admin-specific content here */}
+      {/* Add user-specific content here */}
     </div>
   );
 }

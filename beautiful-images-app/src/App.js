@@ -5,17 +5,20 @@ import { auth , observeAuthState  , addNewUser , signInUser , signOut , sendEmai
 import { useEffect, useState } from 'react';
 import { diraction, translations } from './environments/languages';
 import { useLanguage } from './environments/LanguageContext';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes , useNavigate } from 'react-router-dom';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebook, faGoogle, faLinkedin } from '@fortawesome/free-brands-svg-icons';
 
 import { sendPasswordReset } from './Firebase/FirebaseAuth';
 
+
 import { Link } from 'react-router-dom';
 
-import Admin from './Components/Admin';
+import SignPage from './Components/SignPage';
 import Enter from './Components/Enter';
+import Admin from './Components/Enter';
+
 
 const App = () => {
   const handleSendPasswordResetEmail = async () => {
@@ -54,6 +57,8 @@ const App = () => {
   const [password, setPassword] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
   const [forgetPassword, setForgetPassword] = useState(true);
+
+  const [WelcomePage, setWelcomePage] = useState(true);
 
   const handleForgetPassword = () => {
     setForgetPassword(false);
@@ -125,32 +130,27 @@ const App = () => {
     await signOut(auth);
   };
 
-  const handleSendVerificationEmail = () => {
-    sendEmailVerificationLink(auth.currentUser);
+  const handleSignPage = async () => {
+    setWelcomePage(false);
   };
+
 
   return (
     <Router>
       <div className="App">
         <header>
           <nav className="TopLayerHeader">
-            <div class="select">
-              <select
-                value={currentLanguage}
-                onChange={(e) => handleLanguageChange(e.target.value)}
-              >
-                <option value="en">English</option>
-                <option value="he">עברית</option>
-              </select>
-            </div>
-            <p>Welcome, {user ? user.email : 'Guest'}!</p>
+          <img src="/logo-no-background.svg" alt="SVG Image" style={{ width: '320px', height: '240px'  , padding:'40px'}} />
 
             <ul>
               <li>
-                <Link to="/admin">{translations.Admin[currentLanguage]}</Link>
+                <Link >{translations.Admin[currentLanguage]}</Link>
               </li>
               <li>
-                <Link to="/enter">About</Link>
+                <Link to="/enter">{translations.About[currentLanguage]}</Link>
+              </li>
+              <li>
+                <Link>{translations.WelcomeLogin[currentLanguage]} {user ? user.email : translations.Guest[currentLanguage]}</Link>
               </li>
               <li>
                   {user ? (
@@ -159,78 +159,30 @@ const App = () => {
                     <h></h>
                   )}
               </li>
+              <div class="select">
+                <select value={currentLanguage} onChange={(e) => handleLanguageChange(e.target.value)}>
+                  <option value="en">English</option>
+                  <option value="he">עברית</option>
+                </select>
+              </div>
             </ul>
           </nav>
         </header>
 
 
         <div className="ContentBelowHeader">
-          <div className={`container ${isSignUpActive ? 'right-panel-active' : ''}`} id="container">
-            <div className="form-container sign-up-container">
-              <form action="#">
-                <h1>{translations.CreateAccount[currentLanguage]}</h1>
-                <div className="social-container">
-                  <a href="#" className="social">
-                    <FontAwesomeIcon icon={faFacebook} />
-                  </a>
-                  <a href="#" className="social">
-                    <FontAwesomeIcon icon={faGoogle} onClick={handleSignInGoogle} />
-                  </a>
-                  <a href="#" className="social">
-                    <FontAwesomeIcon icon={faLinkedin} />
-                  </a>
-                </div>
-                <span style={{fontSize:'13px'}}>{translations.EmailRegistration[currentLanguage]}</span>
-                <input type="email" placeholder={translations.Email[currentLanguage]} value={email} onChange={handleEmailChange} dir={diraction.dir[currentLanguage]}/>
-                <input type="password" placeholder={translations.Password[currentLanguage]} value={password} onChange={handlePasswordChange} dir={diraction.dir[currentLanguage]} />
-                <button onClick={handleAddNewUser}>{translations.SignUp[currentLanguage]}</button>
-                <span  style={{ color: 'red', fontSize:'12px'}}>{errorMsg}</span>
-              </form>
-            </div>
-            <div className="form-container sign-in-container">
-              <form action="#">
-                <h1>{translations.SignIn[currentLanguage]}</h1>
-                  <div className="social-container">
-                    <a href="#" className="social">
-                      <FontAwesomeIcon icon={faFacebook} />
-                    </a>
-                    <a href="#" className="social">
-                      <FontAwesomeIcon icon={faGoogle} onClick={handleSignInGoogle} />
-                    </a>
-                    <a href="#" className="social">
-                      <FontAwesomeIcon icon={faLinkedin} />
-                    </a>
-                  </div>
-                  <span style={{fontSize:'13px'}}>{translations.UseYourAccount[currentLanguage]}</span>
-                <input type="email" placeholder={translations.Email[currentLanguage]} value={email} onChange={handleEmailChange} dir={diraction.dir[currentLanguage]}/>
-                {forgetPassword ? (<> <input type="password" placeholder={translations.Password[currentLanguage]} value={password} onChange={handlePasswordChange} dir={diraction.dir[currentLanguage]}/>
-                <a href="#" onClick={handleForgetPassword}>{translations.ForgetPassword[currentLanguage]}</a>
-                <button onClick={handleSignIn}>{translations.SignIn[currentLanguage]}</button> </> )
-                :(<button onClick={handleSendPasswordResetEmail}>{translations.SendVerification[currentLanguage]}</button>)}
-              </form>
-            </div>
-            <div className="overlay-container">
-              <div className="overlay">
-                <div className="overlay-panel overlay-left">
-                  <h1>{translations.WelcomeBack[currentLanguage]}</h1>
-                  <p>{translations.LoginPersonalInfo[currentLanguage]}</p>
-                  <button className="ghost" id="signIn" onClick={handleSignInClick}>
-                  {translations.SignIn[currentLanguage]}
-                  </button>
-                </div>
-                <div className="overlay-panel overlay-right">
-                  <h1> {translations.HelloFriend[currentLanguage]}</h1>
-                  <p>{translations.PersonalDetails[currentLanguage]}</p>
-                  <button className="ghost" id="signUp" onClick={handleSignUpClick}>
-                  {translations.SignUp[currentLanguage]}
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
+        {WelcomePage && (
+        <div >
+          <img src="/screen.png" alt="SVG Image" style={{ width: '700px', height: '495px' , top: '25%' , position:'fixed', right: '200px',  }} />
+          <h1 className="homepage-heading" style={{fontSize: '85px' , marginTop:'150px'}}>{translations.Welcome1[currentLanguage]}</h1>
+          <h1 className="homepage-heading" style={{fontSize: '60px'  , marginTop:'-40px'}}>{translations.Welcome2[currentLanguage]}</h1>
+          <Link to="/sign_page" class="button-53" role="button" onClick={handleSignPage} style={{	marginLeft: '315px'}}>Get Started</Link>
+
+        </div>
+        )}
 
           <Routes>
-            <Route path="admin/" element={<Admin />} />
+            <Route path="sign_page/" element={<SignPage />} />
             <Route path="/enter" element={<Enter />} />
           </Routes>
         </div>

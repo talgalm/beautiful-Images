@@ -13,9 +13,29 @@ export const diraction  = {
   },
 }
 export const translations  = {
+      WelcomeLogin: {
+        he: 'שלום , ',
+        en: 'Welcome , ',
+      },
+      Guest: {
+        he: 'אורח',
+        en: 'Guest',
+      },
       Email: {
         he: 'מייל',
         en: 'Email',
+      },
+      Start: {
+        he: 'התחל',
+        en: 'Start',
+      },
+      Welcome1: {
+        he: `חקור את היופי`,
+        en: `Explore beauty`,
+      },
+      Welcome2: {
+        he: `דרך עינייך`,
+        en: `through your eyes.`,
       },
       Password: {
         he: 'סיסמא',
@@ -24,6 +44,10 @@ export const translations  = {
       Admin: {
         he: 'אדמין',
         en: 'Admin',
+      },
+      About: {
+        he: 'אודות',
+        en: 'About',
       },
       CreateAccount: {
         he: 'יצירת חשבון',
