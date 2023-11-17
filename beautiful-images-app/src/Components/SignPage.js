@@ -1,8 +1,6 @@
 import React from 'react';
 import '../App.css';
-import { addNewDocument , removeDocument , updateDocument , readDocument , queryDocuments , batchWrite } from '../Firebase/FirebaseActions'; // Import db and addNewDocument
-import { auth , observeAuthState  , addNewUser , signInUser , signOut , sendEmailVerificationLink , deleteUserAccount ,
-  signInWithGoogle  } from '../Firebase/FirebaseAuth';
+import { auth , observeAuthState  , addNewUser , signInUser ,   signInWithGoogle  } from '../Firebase/FirebaseAuth';
 import { useEffect, useState } from 'react';
 import { diraction, translations } from '../environments/languages';
 import { useLanguage } from '../environments/LanguageContext';
@@ -18,6 +16,8 @@ import { Link } from 'react-router-dom';
 import Enter from './Enter';
 
 const SignPage = () => {
+  const { currentLanguage, changeLanguage } = useLanguage();
+  const [isSignUpActive, setSignUpActive] = useState(false);
 
   const handleSendPasswordResetEmail = async () => {
     try {
@@ -28,14 +28,6 @@ const SignPage = () => {
       setErrorMsg(error.message);
     }
   };
-
-  const { currentLanguage, changeLanguage } = useLanguage();
-
-  const handleLanguageChange = (newLanguage) => {
-    changeLanguage(newLanguage);
-  };
-  const [isSignUpActive, setSignUpActive] = useState(false);
-
   const handleSignUpClick = () => {
     setSignUpActive(true);
     setEmail('');
