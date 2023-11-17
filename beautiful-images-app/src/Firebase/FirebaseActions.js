@@ -8,11 +8,12 @@ import {  getFirestore,
   addDoc,getDoc, getDocs, where , query } from 'firebase/firestore/lite';
 
 import firebaseConfig from './FirebaseConfig';
+import { getStorage } from "firebase/storage"
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-
+export const storage = getStorage(app);
 
 const addNewDocument = async (collectionName, docData) => {
     try {

@@ -17,7 +17,8 @@ import { Link } from 'react-router-dom';
 
 import SignPage from './Components/SignPage';
 import Enter from './Components/Enter';
-import Admin from './Components/Enter';
+import Admin from './Components/Admin';
+import ImageUpload from './Components/ImageUpload';
 
 
 const App = () => {
@@ -144,6 +145,9 @@ const App = () => {
 
             <ul>
               <li>
+                <Link to="/imageUpload" onClick={handleSignPage}> upload </Link>
+              </li>
+              <li>
                 <Link >{translations.Admin[currentLanguage]}</Link>
               </li>
               <li>
@@ -184,6 +188,7 @@ const App = () => {
           <Routes>
             <Route path="sign_page/" element={<SignPage />} />
             <Route path="/enter" element={<Enter />} />
+            <Route path="/imageUpload" element={<ImageUpload />} />
           </Routes>
         </div>
       </div>
