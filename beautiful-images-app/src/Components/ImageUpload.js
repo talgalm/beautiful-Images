@@ -23,11 +23,9 @@ const ImageUpload = () => {
 
   useEffect(() => {
     listAll(imageListRef).then((response) => {
-      console.log(response);
-      response.items.forEach((item) => {
-        getDownloadURL(item).then((url) => {
-          setImageList((prevImageList) => [...prevImageList, url]);
-        });
+      const promises = response.items.map((item) => getDownloadURL(item));
+      Promise.all(promises).then((urls) => {
+        setImageList(urls);
       });
     });
   }, []);
@@ -41,14 +39,11 @@ const ImageUpload = () => {
       <button onClick={uploadImage}> Upload Image </button>
 
       <div>
-        {imgaeList.map((image) => {
-          console.log("aaaa");
-          return <img src={image} alt="uploaded" width="300px" margin="10px"/>;
-        })}
+        {imgaeList.map((image, index) => (
+          <img key={index} src={image} alt="uploaded" width="300px" margin="10px" />
+        ))}
       </div>
-
-
-      </div>
+    </div>
   );
 }
 
